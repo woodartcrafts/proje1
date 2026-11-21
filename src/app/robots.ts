@@ -7,7 +7,11 @@ export default function robots(): MetadataRoute.Robots {
   const sitemap = absoluteUrl("/sitemap.xml");
 
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/admin", "/mukellef"] },
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: ["/admin", "/mukellef", "/api"],
+    },
     ...(sitemap ? { sitemap } : {}),
   };
 }

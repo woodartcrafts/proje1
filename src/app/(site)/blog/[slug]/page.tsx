@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { cache } from "react";
+import { BlogViewBeacon } from "@/components/BlogViewBeacon";
 import { IconArrow, IconBook, IconCalendarCheck, IconChevron } from "@/components/Icons";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
@@ -113,6 +114,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
+      <BlogViewBeacon slug={post.slug} />
       <JsonLd data={structuredData} />
       <PageHero
         kicker={

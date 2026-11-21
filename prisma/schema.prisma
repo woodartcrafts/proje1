@@ -85,6 +85,7 @@ model Post {
   published Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  viewCount Int      @default(0) // Yayındaki yazı sayfası görüntülenmesi (yaklaşık)
 
   // Sonradan eklenen alanlar (ham SQL ile okunup yazılır).
   seoTitle       String @default("") // boşsa başlık kullanılır

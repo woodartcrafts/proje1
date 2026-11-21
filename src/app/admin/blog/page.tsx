@@ -8,13 +8,25 @@ import { ConfirmButton } from "@/components/portal/ConfirmButton";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
+async function loadViewCounts(): Promise<Map<string, number>> {
+  try {
+    const rows = await prisma.$queryRaw<{ id: string; viewCount: number | bigint }[]>`
+      SELECT "id", "viewCount" FROM "Post"
+    `;
+    return new Map(rows.map((row) => [row.id, Number(row.viewCount ?? 0)]));
+  } catch {
+    return new Map();
+  }
+}
+
 export default async function AdminBlogPage() {
   const session = await getSession();
   if (!session) redirect("/admin/giris");
 
-  const posts = await prisma.post.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const [posts, views] = await Promise.all([
+    prisma.post.findMany({ orderBy: { createdAt: "desc" } }),
+    loadViewCounts(),
+  ]);
 
   return (
     <>
@@ -33,6 +45,7 @@ export default async function AdminBlogPage() {
               <tr>
                 <th>Başlık</th>
                 <th>Durum</th>
+                <th>Görüntülenme</th>
                 <th>Tarih</th>
                 <th>İşlem</th>
               </tr>
@@ -47,6 +60,9 @@ export default async function AdminBlogPage() {
                     </div>
                   </td>
                   <td>{post.published ? "Yayında" : "Taslak"}</td>
+                  <td>
+                    {(views.get(post.id) ?? 0).toLocaleString("tr-TR")}
+                  </td>
                   <td>{post.createdAt.toLocaleDateString("tr-TR")}</td>
                   <td>
                     <div className="row-actions">
