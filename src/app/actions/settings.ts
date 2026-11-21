@@ -11,6 +11,7 @@ import {
   saveSiteLogo,
   writeSiteLogoFile,
 } from "@/lib/site-logo";
+import { isValidGa4MeasurementId, normalizeGa4MeasurementId } from "@/lib/ga4";
 import {
   TITLE_SCALE_MAX,
   TITLE_SCALE_MIN,
@@ -42,6 +43,13 @@ const schema = z.object({
   externalNewsLabel: z.string().trim().max(80),
   // Haber şeridi açık/kapalı yalnızca Ayarlar formundan gelir (present bayrağı ile).
   externalNewsEnabled: z.boolean().optional(),
+  // GA4 ID yalnızca Ayarlar formundan gelir; diğer formlar göndermezse mevcut değer korunur.
+  ga4MeasurementId: z
+    .string()
+    .trim()
+    .max(32)
+    .refine(isValidGa4MeasurementId, "GA4 kimliği G- ile başlamalı (örn. G-XXXXXXXX)")
+    .optional(),
   // Başlık görünümü yalnızca Site Ayarları formundan gelir. Sosyal Medya formu gibi bu alanları
   // göndermeyen formlar mevcut değeri bozmasın diye ikisi de isteğe bağlıdır (yoksa güncellenmez).
   titleFont: z
@@ -101,6 +109,10 @@ export async function updateSettingsAction(
       formData.get("externalNewsEnabledPresent") === "1"
         ? formData.get("externalNewsEnabled") === "on"
         : undefined,
+    ga4MeasurementId:
+      formData.get("ga4MeasurementIdPresent") === "1"
+        ? String(formData.get("ga4MeasurementId") ?? "")
+        : undefined,
     titleFont: typeof titleFontRaw === "string" ? titleFontRaw : undefined,
     titleScale:
       typeof titleScaleRaw === "string" && titleScaleRaw.trim() !== ""
@@ -124,6 +136,7 @@ export async function updateSettingsAction(
     titleFont,
     titleScale,
     externalNewsEnabled,
+    ga4MeasurementId,
     homeHeroTitle,
     homeHeroText,
     homeHeroPrimaryCta,
@@ -143,6 +156,9 @@ export async function updateSettingsAction(
       required.externalNewsLabel || "Güncel Mali Gelişmeler",
     ...(externalNewsEnabled !== undefined
       ? { externalNewsEnabled: externalNewsEnabled ? 1 : 0 }
+      : {}),
+    ...(ga4MeasurementId !== undefined
+      ? { ga4MeasurementId: normalizeGa4MeasurementId(ga4MeasurementId) }
       : {}),
     ...(titleFont !== undefined ? { titleFont } : {}),
     ...(titleScale !== undefined ? { titleScale } : {}),

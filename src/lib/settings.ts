@@ -1,5 +1,6 @@
 import { prisma } from "./db";
 import { DEFAULT_NEWS_URL } from "./external-news";
+import { normalizeGa4MeasurementId } from "./ga4";
 import { isRealSocialUrl } from "./social-links";
 import { normalizeTitleFont, normalizeTitleScale } from "./title-fonts";
 
@@ -15,6 +16,8 @@ export type SiteSettings = {
   externalNewsLabel: string;
   /** Ana sayfadaki CANLI haber şeridi gösterilsin mi. */
   externalNewsEnabled: boolean;
+  /** GA4 Measurement ID (G-XXXX). Boşsa takip kodu yüklenmez. */
+  ga4MeasurementId: string;
   aboutIntro: string;
   aboutApproachTitle: string;
   aboutApproachText: string;
@@ -92,6 +95,9 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     externalNewsLabel:
       setting?.externalNewsLabel || "Güncel Mali Gelişmeler",
     externalNewsEnabled: (setting?.externalNewsEnabled ?? 1) === 1,
+    ga4MeasurementId: normalizeGa4MeasurementId(
+      (setting as { ga4MeasurementId?: string | null } | null)?.ga4MeasurementId,
+    ),
     aboutIntro:
       setting?.aboutIntro || `${siteTitle}, ${defaults.aboutIntro}`,
     aboutApproachTitle: setting?.aboutApproachTitle || "Çalışma yaklaşımımız",

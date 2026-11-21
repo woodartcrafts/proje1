@@ -27,6 +27,7 @@ model Setting {
   externalNewsUrl     String @default("https://www.ozcankutlu.com/api/news")
   externalNewsLabel   String @default("Güncel Mali Gelişmeler")
   externalNewsEnabled Int    @default(1) // Ana sayfa haber şeridi açık mı (0/1)
+  ga4MeasurementId    String @default("") // Google Analytics 4 Measurement ID (G-XXXX); boşsa yüklenmez
 
   aboutIntro          String @default("")
   aboutApproachTitle  String @default("Çalışma yaklaşımımız")

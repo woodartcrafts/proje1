@@ -1,3 +1,4 @@
+import { Ga4 } from "@/components/Ga4";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteEffects } from "@/components/SiteEffects";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -29,6 +30,7 @@ export default async function SiteLayout({
       style={title.style}
       data-title-custom={title.custom ? "" : undefined}
     >
+      <Ga4 measurementId={settings.ga4MeasurementId} />
       <JsonLd data={buildSiteGraph(settings, logoSrc)} />
       <SiteEffects />
       <SiteHeader

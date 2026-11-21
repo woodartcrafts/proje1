@@ -221,6 +221,32 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
         />
       </label>
 
+      <h3 className="admin-subtitle">Google Analytics (isteğe bağlı)</h3>
+      <p className="form-hint">
+        Boş bırakabilirsiniz. Doldurursanız ziyaretler Google Analytics 4’e gider;
+        raporları{" "}
+        <a
+          href="https://analytics.google.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          analytics.google.com
+        </a>{" "}
+        üzerinden görürsünüz. Admin blog “Görüntülenme” sayacı bundan ayrıdır.
+      </p>
+      <input type="hidden" name="ga4MeasurementIdPresent" value="1" />
+      <label>
+        GA4 Measurement ID
+        <input
+          name="ga4MeasurementId"
+          maxLength={32}
+          placeholder="G-XXXXXXXX"
+          defaultValue={settings.ga4MeasurementId}
+          autoComplete="off"
+          spellCheck={false}
+        />
+      </label>
+
       <h3 className="admin-subtitle">Güncel mali gelişmeler</h3>
       <p className="form-hint">
         Ana sayfadaki “CANLI” haber şeridi bu adresten beslenir. Ne yazacağınızı bilmiyorsanız olduğu gibi bırakın.
