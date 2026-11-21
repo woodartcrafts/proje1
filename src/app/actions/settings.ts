@@ -40,6 +40,8 @@ const schema = z.object({
   whatsapp: optionalUrl,
   externalNewsUrl: optionalUrl,
   externalNewsLabel: z.string().trim().max(80),
+  // Haber şeridi açık/kapalı yalnızca Ayarlar formundan gelir (present bayrağı ile).
+  externalNewsEnabled: z.boolean().optional(),
   // Başlık görünümü yalnızca Site Ayarları formundan gelir. Sosyal Medya formu gibi bu alanları
   // göndermeyen formlar mevcut değeri bozmasın diye ikisi de isteğe bağlıdır (yoksa güncellenmez).
   titleFont: z
@@ -95,6 +97,10 @@ export async function updateSettingsAction(
     whatsapp: formData.get("whatsapp") ?? "",
     externalNewsUrl: formData.get("externalNewsUrl") ?? "",
     externalNewsLabel: formData.get("externalNewsLabel") ?? "",
+    externalNewsEnabled:
+      formData.get("externalNewsEnabledPresent") === "1"
+        ? formData.get("externalNewsEnabled") === "on"
+        : undefined,
     titleFont: typeof titleFontRaw === "string" ? titleFontRaw : undefined,
     titleScale:
       typeof titleScaleRaw === "string" && titleScaleRaw.trim() !== ""
@@ -117,6 +123,7 @@ export async function updateSettingsAction(
   const {
     titleFont,
     titleScale,
+    externalNewsEnabled,
     homeHeroTitle,
     homeHeroText,
     homeHeroPrimaryCta,
@@ -134,6 +141,9 @@ export async function updateSettingsAction(
       required.externalNewsUrl || "https://www.ozcankutlu.com/api/news",
     externalNewsLabel:
       required.externalNewsLabel || "Güncel Mali Gelişmeler",
+    ...(externalNewsEnabled !== undefined
+      ? { externalNewsEnabled: externalNewsEnabled ? 1 : 0 }
+      : {}),
     ...(titleFont !== undefined ? { titleFont } : {}),
     ...(titleScale !== undefined ? { titleScale } : {}),
     ...(homeHeroTitle !== undefined ? { homeHeroTitle } : {}),

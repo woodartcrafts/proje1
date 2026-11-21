@@ -13,6 +13,8 @@ export type SiteSettings = {
   whatsapp: string;
   externalNewsUrl: string;
   externalNewsLabel: string;
+  /** Ana sayfadaki CANLI haber şeridi gösterilsin mi. */
+  externalNewsEnabled: boolean;
   aboutIntro: string;
   aboutApproachTitle: string;
   aboutApproachText: string;
@@ -89,6 +91,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     externalNewsUrl: setting?.externalNewsUrl || DEFAULT_NEWS_URL,
     externalNewsLabel:
       setting?.externalNewsLabel || "Güncel Mali Gelişmeler",
+    externalNewsEnabled: (setting?.externalNewsEnabled ?? 1) === 1,
     aboutIntro:
       setting?.aboutIntro || `${siteTitle}, ${defaults.aboutIntro}`,
     aboutApproachTitle: setting?.aboutApproachTitle || "Çalışma yaklaşımımız",

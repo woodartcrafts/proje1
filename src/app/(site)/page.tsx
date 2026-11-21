@@ -81,7 +81,9 @@ export default async function HomePage() {
   const settings = await getSiteSettings();
   const [posts, externalNews, homeServices, portalEnabled] = await Promise.all([
     listPublishedPosts({ take: 3 }),
-    fetchExternalNews(settings.externalNewsUrl, 5),
+    settings.externalNewsEnabled
+      ? fetchExternalNews(settings.externalNewsUrl, 5)
+      : Promise.resolve([]),
     prisma.service.findMany({
       orderBy: { sortOrder: "asc" },
       take: 4,
@@ -121,9 +123,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mg-wrap">
-        <MaliGelismelerSlider items={externalNews} />
-      </section>
+      {settings.externalNewsEnabled && externalNews.length > 0 ? (
+        <section className="mg-wrap">
+          <MaliGelismelerSlider items={externalNews} />
+        </section>
+      ) : null}
 
       <section className="section">
         <div className="container">

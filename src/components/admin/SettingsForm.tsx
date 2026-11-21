@@ -225,6 +225,15 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
       <p className="form-hint">
         Ana sayfadaki “CANLI” haber şeridi bu adresten beslenir. Ne yazacağınızı bilmiyorsanız olduğu gibi bırakın.
       </p>
+      <input type="hidden" name="externalNewsEnabledPresent" value="1" />
+      <label className="checkbox-row">
+        <input
+          type="checkbox"
+          name="externalNewsEnabled"
+          defaultChecked={settings.externalNewsEnabled}
+        />
+        Ana sayfada haber şeridini göster
+      </label>
       <div className="form-row">
         <label>
           Haber kaynağı adresi

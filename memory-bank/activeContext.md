@@ -12,3 +12,4 @@ Ana sayfa dolduruldu: tüm yararlı linkler + ozcankutlu.com blog haberleri.
 - Blog / hizmet formlarında kaydetmeden önce “SEO kontrolü yap” (metin tabanlı, Blob yok)
 - SEO puanı anlam AI’sı değil; uzunluk + anlamsız tuşlama + yazım şüphesi (hece/tuş; sözlük değil)
 - Blog SEO: başlık/özet/içerik/SEO alanlarında gibberish + yazım uyarısı
+- Haber şeridi: Admin > Ayarlar’da “Ana sayfada haber şeridini göster” (Setting.externalNewsEnabled)

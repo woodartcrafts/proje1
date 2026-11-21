@@ -24,8 +24,9 @@ model Setting {
   twitter           String   @default("")
   youtube           String   @default("")
   whatsapp          String   @default("")
-  externalNewsUrl   String   @default("https://www.ozcankutlu.com/api/news")
-  externalNewsLabel String   @default("Güncel Mali Gelişmeler")
+  externalNewsUrl     String @default("https://www.ozcankutlu.com/api/news")
+  externalNewsLabel   String @default("Güncel Mali Gelişmeler")
+  externalNewsEnabled Int    @default(1) // Ana sayfa haber şeridi açık mı (0/1)
 
   aboutIntro          String @default("")
   aboutApproachTitle  String @default("Çalışma yaklaşımımız")
