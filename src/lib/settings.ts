@@ -14,7 +14,7 @@ export type SiteSettings = {
   whatsapp: string;
   externalNewsUrl: string;
   externalNewsLabel: string;
-  /** Ana sayfadaki CANLI haber şeridi gösterilsin mi. */
+  /** Ana sayfadaki CANLI haber slaytı gösterilsin mi. */
   externalNewsEnabled: boolean;
   /** GA4 Measurement ID (G-XXXX). Boşsa takip kodu yüklenmez. */
   ga4MeasurementId: string;

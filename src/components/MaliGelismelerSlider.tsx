@@ -55,35 +55,12 @@ function shorten(text: string, max = 140) {
 
 type Props = {
   items: ExternalNewsItem[];
-  /** Ayarlar’daki kaynak etiketi; boşsa varsayılan. */
   label?: string;
 };
 
-export function MaliGelismelerSlider({
-  items,
-  label = "Güncel mali gelişmeler",
-}: Props) {
-  const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (items.length < 2 || paused) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setInterval(() => {
-      setIndex((current) => (current + 1) % items.length);
-    }, 8000);
-    return () => window.clearInterval(timer);
-  }, [items.length, paused]);
-
-  if (items.length === 0) return null;
-
-  const item = items[index] ?? items[0];
-  const go = (next: number) => {
-    setIndex((next + items.length) % items.length);
-  };
-
-  const cardInner = (
-    <div className={`mg-card ${themeClass(item.theme)}`}>
+function NewsSlide({ item }: { item: ExternalNewsItem }) {
+  const card = (
+    <article className={`mg-card ${themeClass(item.theme)}`}>
       <div className="mg-card-top">
         <span className="mg-badge">{item.badge}</span>
       </div>
@@ -103,12 +80,51 @@ export function MaliGelismelerSlider({
           {item.source}
         </span>
       </div>
-    </div>
+    </article>
   );
+
+  if (item.href) {
+    return (
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mg-slide-link"
+      >
+        {card}
+      </a>
+    );
+  }
+
+  return <div className="mg-slide-link">{card}</div>;
+}
+
+export function MaliGelismelerSlider({
+  items,
+  label = "Güncel mali gelişmeler",
+}: Props) {
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (items.length < 2 || paused) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => {
+      setIndex((current) => (current + 1) % items.length);
+    }, 8000);
+    return () => window.clearInterval(timer);
+  }, [items.length, paused]);
+
+  if (items.length === 0) return null;
+
+  const go = (next: number) => {
+    setIndex((next + items.length) % items.length);
+  };
 
   return (
     <section
       className="mg-section"
+      aria-roledescription="carousel"
       aria-label={label}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -134,18 +150,20 @@ export function MaliGelismelerSlider({
         ) : null}
 
         <div className="mg-viewport">
-          {item.href ? (
-            <a
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mg-card-link"
-            >
-              {cardInner}
-            </a>
-          ) : (
-            <div className="mg-card-link">{cardInner}</div>
-          )}
+          <div
+            className="mg-track"
+            style={{ transform: `translate3d(-${index * 100}%, 0, 0)` }}
+          >
+            {items.map((item, i) => (
+              <div
+                key={item.id}
+                className="mg-slide"
+                aria-hidden={i === index ? undefined : true}
+              >
+                <NewsSlide item={item} />
+              </div>
+            ))}
+          </div>
         </div>
 
         {items.length > 1 ? (
@@ -161,14 +179,15 @@ export function MaliGelismelerSlider({
       </div>
 
       {items.length > 1 ? (
-        <div className="mg-dots" role="group" aria-label="Haber seçimi">
+        <div className="mg-dots" role="tablist" aria-label="Haber seçimi">
           {items.map((entry, i) => (
             <button
               key={entry.id}
               type="button"
+              role="tab"
               className={i === index ? "is-active" : ""}
               aria-label={`Haber ${i + 1}`}
-              aria-current={i === index ? "true" : undefined}
+              aria-selected={i === index}
               onClick={() => setIndex(i)}
             />
           ))}

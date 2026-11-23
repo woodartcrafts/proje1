@@ -533,23 +533,43 @@ img {
 }
 
 .mg-viewport {
-  min-width: 0;
-}
-
-.mg-card-link {
-  display: block;
+  overflow: hidden;
   min-width: 0;
   border-radius: 18px;
+}
+
+.mg-track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mg-track {
+    transition: none;
+  }
+}
+
+.mg-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  width: 100%;
+}
+
+.mg-slide-link {
+  display: block;
+  min-width: 0;
   color: inherit;
   text-decoration: none;
 }
 
-a.mg-card-link:hover .mg-title {
+a.mg-slide-link:hover .mg-title {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-.mg-card-link:focus-visible,
+.mg-slide-link:focus-visible,
 .mg-nav:focus-visible,
 .mg-dots button:focus-visible {
   outline: 2px solid var(--brand);
@@ -561,8 +581,8 @@ a.mg-card-link:hover .mg-title {
   overflow: hidden;
   display: grid;
   gap: 0.65rem;
-  min-height: 168px;
-  padding: 1.15rem 1.35rem 1.1rem;
+  min-height: 200px;
+  padding: 1.35rem 3.4rem 1.25rem;
   border-radius: 18px;
   color: #fff;
   background:
@@ -732,9 +752,13 @@ a.mg-card-link:hover .mg-title {
     padding-top: 1.1rem;
   }
 
+  .mg-viewport {
+    border-radius: 14px;
+  }
+
   .mg-card {
     min-height: 0;
-    padding: 1rem 1.05rem 1rem;
+    padding: 1.05rem 2.85rem 1rem;
     border-radius: 14px;
   }
 

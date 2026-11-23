@@ -249,7 +249,7 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
 
       <h3 className="admin-subtitle">Güncel mali gelişmeler</h3>
       <p className="form-hint">
-        Ana sayfadaki “CANLI” haber şeridi bu adresten beslenir. Ne yazacağınızı bilmiyorsanız olduğu gibi bırakın.
+        Ana sayfadaki “CANLI” haber slaytı bu adresten beslenir. Ne yazacağınızı bilmiyorsanız olduğu gibi bırakın.
       </p>
       <input type="hidden" name="externalNewsEnabledPresent" value="1" />
       <label className="checkbox-row">
@@ -258,7 +258,7 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
           name="externalNewsEnabled"
           defaultChecked={settings.externalNewsEnabled}
         />
-        Ana sayfada haber şeridini göster
+        Ana sayfada haber slaytını göster
       </label>
       <div className="form-row">
         <label>
