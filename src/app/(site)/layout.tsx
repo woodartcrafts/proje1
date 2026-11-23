@@ -3,6 +3,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { SiteEffects } from "@/components/SiteEffects";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 import { isPortalEnabled } from "@/lib/portal-db";
 import { buildSiteGraph } from "@/lib/seo";
 import { getSiteSettings } from "@/lib/settings";
@@ -43,6 +44,11 @@ export default async function SiteLayout({
         settings={settings}
         logoSrc={logoSrc}
         portalEnabled={portalEnabled}
+      />
+      <WhatsAppFloat
+        href={settings.whatsapp}
+        message={settings.whatsappMessage}
+        enabled={settings.whatsappFloat}
       />
     </div>
   );

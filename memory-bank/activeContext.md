@@ -17,3 +17,4 @@ Ana sayfa dolduruldu: tüm yararlı linkler + ozcankutlu.com blog haberleri.
 - GA4: Admin > Ayarlar’da Measurement ID (G-XXXX); doluysa site layout gtag yükler; rapor analytics.google.com
 - Hero evrak yığını: Setting.heroDocs JSON; Admin > Ayarlar’dan 3 belge başlık/satır/mühür
 - İletişim haritası: Setting.contactMapEmbed; Admin > İletişim’den Google embed; boşsa gizli
+- WhatsApp: Admin > İletişim (numara, hazır mesaj, sabit düğme); iletişim sayfası + float CTA

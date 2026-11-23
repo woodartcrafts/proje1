@@ -24,6 +24,8 @@ model Setting {
   twitter           String   @default("")
   youtube           String   @default("")
   whatsapp          String   @default("")
+  whatsappMessage   String   @default("") // WhatsApp hazır mesaj (opsiyonel)
+  whatsappFloat     Int      @default(1) // Sabit WhatsApp düğmesi (0/1); whatsapp doluysa
   externalNewsUrl     String @default("https://www.ozcankutlu.com/api/news")
   externalNewsLabel   String @default("Güncel Mali Gelişmeler")
   externalNewsEnabled Int    @default(1) // Ana sayfa haber şeridi açık mı (0/1)

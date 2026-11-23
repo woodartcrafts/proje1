@@ -24,6 +24,10 @@ import {
   normalizeContactMapEmbed,
 } from "@/lib/contact-map";
 import { getSiteSettings } from "@/lib/settings";
+import {
+  isValidWhatsAppInput,
+  normalizeWhatsAppHref,
+} from "@/lib/whatsapp";
 
 export type PageState = {
   error?: string;
@@ -55,6 +59,16 @@ const contactSchema = z.object({
       isValidContactMapEmbedInput,
       "Google Haritalar yerleştirme (embed) kodu veya adresi yapıştırın",
     ),
+  whatsapp: z
+    .string()
+    .trim()
+    .max(120)
+    .refine(
+      isValidWhatsAppInput,
+      "WhatsApp için wa.me linki veya ülke kodlu numara girin (örn. 905xxxxxxxxx)",
+    ),
+  whatsappMessage: z.string().trim().max(300),
+  whatsappFloat: z.boolean(),
 });
 
 export async function updateAboutAction(
@@ -114,6 +128,11 @@ export async function updateContactAction(
     contactAddress: formData.get("contactAddress"),
     contactHours: formData.get("contactHours"),
     contactMapEmbed: formData.get("contactMapEmbed") ?? "",
+    whatsapp: formData.get("whatsapp") ?? "",
+    whatsappMessage: formData.get("whatsappMessage") ?? "",
+    whatsappFloat: formData.get("whatsappFloatPresent") === "1"
+      ? formData.get("whatsappFloat") === "on"
+      : true,
   });
 
   if (!parsed.success) {
@@ -121,8 +140,16 @@ export async function updateContactAction(
   }
 
   const data = {
-    ...parsed.data,
+    contactHeroTitle: parsed.data.contactHeroTitle,
+    contactHeroText: parsed.data.contactHeroText,
+    contactEmail: parsed.data.contactEmail,
+    contactPhone: parsed.data.contactPhone,
+    contactAddress: parsed.data.contactAddress,
+    contactHours: parsed.data.contactHours,
     contactMapEmbed: normalizeContactMapEmbed(parsed.data.contactMapEmbed),
+    whatsapp: normalizeWhatsAppHref(parsed.data.whatsapp),
+    whatsappMessage: parsed.data.whatsappMessage,
+    whatsappFloat: parsed.data.whatsappFloat ? 1 : 0,
   };
 
   await prisma.setting.upsert({
@@ -135,6 +162,7 @@ export async function updateContactAction(
     },
   });
 
+  revalidatePath("/", "layout");
   revalidatePath("/iletisim");
   revalidatePath("/", "layout");
   revalidatePath("/admin/iletisim");

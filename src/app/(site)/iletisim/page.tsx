@@ -8,6 +8,7 @@ import { prisma } from "@/lib/db";
 import { getProfessionalInfo } from "@/lib/professional-info";
 import { pageMetadata } from "@/lib/seo";
 import { getSiteSettings } from "@/lib/settings";
+import { buildWhatsAppChatUrl } from "@/lib/whatsapp";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -27,6 +28,10 @@ export default async function ContactPage() {
       select: { title: true },
     }),
   ]);
+  const whatsappUrl = buildWhatsAppChatUrl(
+    settings.whatsapp,
+    settings.whatsappMessage,
+  );
 
   return (
     <>
@@ -79,6 +84,16 @@ export default async function ContactPage() {
                 <strong>{settings.contactHours}</strong>
               </div>
             </div>
+            {whatsappUrl ? (
+              <a
+                href={whatsappUrl}
+                className="btn btn-primary contact-wa-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                WhatsApp ile yazın
+              </a>
+            ) : null}
             <ProfessionalInfoAside info={professional} />
           </aside>
         </div>

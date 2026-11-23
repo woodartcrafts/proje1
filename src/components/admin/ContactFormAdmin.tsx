@@ -69,6 +69,42 @@ export function ContactFormAdmin({ settings }: { settings: SiteSettings }) {
         />
       </label>
 
+      <h3 className="admin-subtitle">WhatsApp</h3>
+      <p className="form-hint">
+        Numara veya <code>https://wa.me/905xxxxxxxxx</code> linki. Doluysa
+        sitede sabit düğme ve iletişim sayfasında WhatsApp butonu çıkar. Sosyal
+        Medya’daki WhatsApp ile aynı alandır.
+      </p>
+      <label>
+        WhatsApp numarası / linki
+        <input
+          name="whatsapp"
+          maxLength={120}
+          placeholder="905xxxxxxxxx veya https://wa.me/905xxxxxxxxx"
+          defaultValue={settings.whatsapp}
+          autoComplete="tel"
+        />
+      </label>
+      <label>
+        Hazır mesaj (opsiyonel)
+        <textarea
+          name="whatsappMessage"
+          rows={2}
+          maxLength={300}
+          placeholder="Merhaba, web sitenizden yazıyorum…"
+          defaultValue={settings.whatsappMessage}
+        />
+      </label>
+      <input type="hidden" name="whatsappFloatPresent" value="1" />
+      <label className="checkbox-row">
+        <input
+          type="checkbox"
+          name="whatsappFloat"
+          defaultChecked={settings.whatsappFloat}
+        />
+        Sağ altta sabit WhatsApp düğmesini göster
+      </label>
+
       <h3 className="admin-subtitle">Google Haritalar</h3>
       <p className="form-hint">
         Google Haritalar’da ofisinizi açın → <strong>Paylaş</strong> →{" "}

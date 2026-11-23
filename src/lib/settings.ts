@@ -4,6 +4,7 @@ import { DEFAULT_NEWS_URL } from "./external-news";
 import { normalizeGa4MeasurementId } from "./ga4";
 import { isRealSocialUrl } from "./social-links";
 import { normalizeTitleFont, normalizeTitleScale } from "./title-fonts";
+import { normalizeWhatsAppHref } from "./whatsapp";
 
 export type SiteSettings = {
   siteTitle: string;
@@ -13,6 +14,10 @@ export type SiteSettings = {
   twitter: string;
   youtube: string;
   whatsapp: string;
+  /** WhatsApp sohbetine eklenecek hazır metin. */
+  whatsappMessage: string;
+  /** Sağ altta sabit WhatsApp düğmesi. */
+  whatsappFloat: boolean;
   externalNewsUrl: string;
   externalNewsLabel: string;
   /** Ana sayfadaki CANLI haber slaytı gösterilsin mi. */
@@ -93,7 +98,15 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     linkedin: setting?.linkedin ?? "",
     twitter: setting?.twitter ?? "",
     youtube: setting?.youtube ?? "",
-    whatsapp: setting?.whatsapp ?? "",
+    whatsapp: normalizeWhatsAppHref(setting?.whatsapp ?? ""),
+    whatsappMessage: (
+      (setting as { whatsappMessage?: string | null } | null)?.whatsappMessage ?? ""
+    )
+      .trim()
+      .slice(0, 300),
+    whatsappFloat:
+      ((setting as { whatsappFloat?: number | null } | null)?.whatsappFloat ?? 1) ===
+      1,
     externalNewsUrl: setting?.externalNewsUrl || DEFAULT_NEWS_URL,
     externalNewsLabel:
       setting?.externalNewsLabel || "Güncel Mali Gelişmeler",

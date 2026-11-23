@@ -17,6 +17,7 @@ import {
   TITLE_SCALE_MIN,
   isTitleFontKey,
 } from "@/lib/title-fonts";
+import { normalizeWhatsAppHref } from "@/lib/whatsapp";
 
 const optionalUrl = z
   .string()
@@ -150,6 +151,7 @@ export async function updateSettingsAction(
 
   const data = {
     ...required,
+    whatsapp: normalizeWhatsAppHref(required.whatsapp),
     externalNewsUrl:
       required.externalNewsUrl || "https://www.ozcankutlu.com/api/news",
     externalNewsLabel:
