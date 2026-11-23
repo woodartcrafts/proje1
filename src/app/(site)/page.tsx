@@ -1,21 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { HeroDocs } from "@/components/HeroDocs";
-import { FeatureCard, PostCard, ServiceCard, ToolCard } from "@/components/Cards";
+import { PostCard, ServiceCard, ToolCard } from "@/components/Cards";
 import { MaliGelismelerSlider } from "@/components/MaliGelismelerSlider";
 import { PortalScene } from "@/components/PortalScene";
 import {
   IconBook,
   IconBriefcase,
   IconCalculator,
-  IconCalendarCheck,
   IconChecklist,
   IconDownload,
-  IconEye,
   IconLock,
-  IconShieldCheck,
   IconStatement,
-  IconTrend,
   IconUpload,
 } from "@/components/Icons";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -194,35 +190,6 @@ export default async function HomePage() {
           </div>
         </section>
       ) : null}
-
-      <section className="section band-section">
-        <div className="container">
-          <SectionHeading title="Güven odaklı" icon={IconShieldCheck} />
-        </div>
-        <div className="container sc-grid sc-grid-3">
-          <FeatureCard
-            icon={IconCalendarCheck}
-            tone="blue"
-            index={0}
-            title="Zamanında beyan"
-            text="Vergi takvimini kaçırmadan yönetir, riskleri erken görünür kılarız."
-          />
-          <FeatureCard
-            icon={IconEye}
-            tone="green"
-            index={1}
-            title="Şeffaf raporlama"
-            text="Dönemsel özetlerle nakit akışı ve yükümlülüklerinizi net takip edersiniz."
-          />
-          <FeatureCard
-            icon={IconTrend}
-            tone="amber"
-            index={2}
-            title="Büyüme odaklı danışmanlık"
-            text="Kuruluştan ölçeklenmeye kadar doğru yapılandırma için yanınızdayız."
-          />
-        </div>
-      </section>
 
       <section className="section band-section">
         <div className="container">
