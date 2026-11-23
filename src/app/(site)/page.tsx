@@ -15,7 +15,7 @@ import {
   IconUpload,
 } from "@/components/Icons";
 import { SectionHeading } from "@/components/SectionHeading";
-import { calculatorLinks, type CalculatorLink } from "@/data/calculators";
+import { calculatorLinks } from "@/data/calculators";
 import { prisma } from "@/lib/db";
 import { fetchExternalNews } from "@/lib/external-news";
 import { isPortalEnabled } from "@/lib/portal-db";
@@ -30,22 +30,6 @@ export function generateMetadata(): Metadata {
   const url = absoluteUrl("/");
   return url ? { alternates: { canonical: url } } : {};
 }
-
-// Ana sayfada gösterilen hesaplama araçları (tümü için "Tüm araçlar" bağlantısı var).
-const featuredCalculatorTitles = [
-  "Brüt-Net Bordro",
-  "İşveren Maliyeti",
-  "Kıdem Tazminatı",
-  "KDV Tevkifatı",
-  "Vergi Gecikme Faizi",
-  "Şahıs vs Limited Vergi",
-  "Serbest Meslek Makbuzu",
-  "Kredi Hesaplama",
-];
-
-const featuredCalculators = featuredCalculatorTitles
-  .map((title) => calculatorLinks.find((tool) => tool.title === title))
-  .filter((tool): tool is CalculatorLink => Boolean(tool));
 
 const portalFeatures = [
   {
@@ -235,23 +219,10 @@ export default async function HomePage() {
 
       <section className="section band-section" id="hesaplamalar">
         <div className="container">
-          <SectionHeading
-            title="Hesaplama araçları"
-            icon={IconCalculator}
-            action={
-              <a
-                href="https://www.ozcankutlu.com/tr"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-secondary"
-              >
-                Tüm araçlar
-              </a>
-            }
-          />
+          <SectionHeading title="Hesaplama araçları" icon={IconCalculator} />
 
           <div className="sc-grid sc-grid-4">
-            {featuredCalculators.map((tool, index) => (
+            {calculatorLinks.map((tool, index) => (
               <ToolCard
                 key={`${tool.href}-${tool.title}`}
                 href={tool.href}
