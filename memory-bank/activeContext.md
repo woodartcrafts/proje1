@@ -16,3 +16,4 @@ Ana sayfa dolduruldu: tüm yararlı linkler + ozcankutlu.com blog haberleri.
 - Blog görüntülenme: Post.viewCount; istemci beacon `/api/blog/view`; Admin blog listesinde görünür (GA değil)
 - GA4: Admin > Ayarlar’da Measurement ID (G-XXXX); doluysa site layout gtag yükler; rapor analytics.google.com
 - Hero evrak yığını: Setting.heroDocs JSON; Admin > Ayarlar’dan 3 belge başlık/satır/mühür
+- İletişim haritası: Setting.contactMapEmbed; Admin > İletişim’den Google embed; boşsa gizli

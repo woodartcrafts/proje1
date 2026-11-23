@@ -1,3 +1,4 @@
+import { normalizeContactMapEmbed } from "./contact-map";
 import { prisma } from "./db";
 import { DEFAULT_NEWS_URL } from "./external-news";
 import { normalizeGa4MeasurementId } from "./ga4";
@@ -31,6 +32,8 @@ export type SiteSettings = {
   contactPhone: string;
   contactAddress: string;
   contactHours: string;
+  /** Google Haritalar embed URL; boşsa iletişimde harita gösterilmez. */
+  contactMapEmbed: string;
   servicesIntro: string;
   /** Site başlığı yazı tipi anahtarı (src/lib/title-fonts.ts); boş = tema varsayılanı. */
   titleFont: string;
@@ -114,6 +117,9 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     contactPhone: setting?.contactPhone || CONTACT_PLACEHOLDERS.phone,
     contactAddress: setting?.contactAddress || CONTACT_PLACEHOLDERS.address,
     contactHours: setting?.contactHours || "Hafta içi 09:00 – 18:00",
+    contactMapEmbed: normalizeContactMapEmbed(
+      (setting as { contactMapEmbed?: string | null } | null)?.contactMapEmbed,
+    ),
     servicesIntro:
       setting?.servicesIntro ||
       "Standart hizmet paketimiz, mali müşavirlik ofisinizin temel ihtiyaçlarını kapsayacak şekilde hazırlanmıştır.",

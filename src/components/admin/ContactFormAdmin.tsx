@@ -69,6 +69,25 @@ export function ContactFormAdmin({ settings }: { settings: SiteSettings }) {
         />
       </label>
 
+      <h3 className="admin-subtitle">Google Haritalar</h3>
+      <p className="form-hint">
+        Google Haritalar’da ofisinizi açın → <strong>Paylaş</strong> →{" "}
+        <strong>Haritayı yerleştir</strong> → HTML’yi kopyalayıp aşağıya
+        yapıştırın (veya yalnızca <code>src=&quot;…&quot;</code> adresini).
+        Boş bırakırsanız harita gösterilmez.
+      </p>
+      <label>
+        Harita yerleştirme kodu / adresi
+        <textarea
+          name="contactMapEmbed"
+          rows={4}
+          maxLength={2000}
+          placeholder='https://www.google.com/maps/embed?pb=…'
+          defaultValue={settings.contactMapEmbed}
+          spellCheck={false}
+        />
+      </label>
+
       {state.error ? <p className="form-error">{state.error}</p> : null}
       {state.success ? <p className="form-success">{state.success}</p> : null}
       <button type="submit" className="btn btn-primary" disabled={pending}>

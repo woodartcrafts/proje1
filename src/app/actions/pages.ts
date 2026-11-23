@@ -19,6 +19,10 @@ import {
 import { getKvkkInfo, saveKvkkInfo } from "@/lib/kvkk-info";
 import { buildKvkkTemplate, kvkkTemplateInput } from "@/lib/kvkk-text";
 import { saveProfessionalInfo } from "@/lib/professional-info";
+import {
+  isValidContactMapEmbedInput,
+  normalizeContactMapEmbed,
+} from "@/lib/contact-map";
 import { getSiteSettings } from "@/lib/settings";
 
 export type PageState = {
@@ -43,6 +47,14 @@ const contactSchema = z.object({
   contactPhone: z.string().trim().min(5).max(40),
   contactAddress: z.string().trim().min(3).max(160),
   contactHours: z.string().trim().min(3).max(80),
+  contactMapEmbed: z
+    .string()
+    .trim()
+    .max(2000)
+    .refine(
+      isValidContactMapEmbedInput,
+      "Google Haritalar yerleştirme (embed) kodu veya adresi yapıştırın",
+    ),
 });
 
 export async function updateAboutAction(
@@ -101,19 +113,25 @@ export async function updateContactAction(
     contactPhone: formData.get("contactPhone"),
     contactAddress: formData.get("contactAddress"),
     contactHours: formData.get("contactHours"),
+    contactMapEmbed: formData.get("contactMapEmbed") ?? "",
   });
 
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Geçersiz veri" };
   }
 
+  const data = {
+    ...parsed.data,
+    contactMapEmbed: normalizeContactMapEmbed(parsed.data.contactMapEmbed),
+  };
+
   await prisma.setting.upsert({
     where: { id: "main" },
-    update: parsed.data,
+    update: data,
     create: {
       id: "main",
       siteTitle: "Mali Müşavirlik",
-      ...parsed.data,
+      ...data,
     },
   });
 

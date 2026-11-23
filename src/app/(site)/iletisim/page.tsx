@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
+import { ContactMap } from "@/components/ContactMap";
 import { IconClock, IconMail, IconMapPin, IconPhone } from "@/components/Icons";
 import { PageHero } from "@/components/PageHero";
 import { ProfessionalInfoAside } from "@/components/ProfessionalInfo";
@@ -81,6 +82,11 @@ export default async function ContactPage() {
             <ProfessionalInfoAside info={professional} />
           </aside>
         </div>
+        {settings.contactMapEmbed ? (
+          <div className="container contact-map-wrap">
+            <ContactMap embedSrc={settings.contactMapEmbed} />
+          </div>
+        ) : null}
       </section>
     </>
   );

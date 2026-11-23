@@ -43,6 +43,7 @@ model Setting {
   contactPhone     String @default("+90 (212) 000 00 00")
   contactAddress   String @default("İstanbul, Türkiye")
   contactHours     String @default("Hafta içi 09:00 – 18:00")
+  contactMapEmbed  String @default("") // Google Haritalar embed src; boşsa harita yok
   servicesIntro    String @default("Standart hizmet paketimiz, mali müşavirlik ofisinizin temel ihtiyaçlarını kapsayacak şekilde hazırlanmıştır.")
   servicesProcess  String @default("")
   professionalInfo String @default("")
