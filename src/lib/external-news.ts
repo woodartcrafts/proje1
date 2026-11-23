@@ -80,8 +80,8 @@ const DAY_MS = 24 * 60 * 60 * 1000;
  */
 export async function fetchExternalNews(
   sourceUrl = DEFAULT_NEWS_URL,
-  limit = 5,
-  maxAgeDays = 30,
+  limit = 15,
+  maxAgeDays = 60,
 ): Promise<ExternalNewsItem[]> {
   const url = sourceUrl.trim() || DEFAULT_NEWS_URL;
 

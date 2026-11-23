@@ -78,7 +78,7 @@ export default async function HomePage() {
   const [posts, externalNews, homeServices, portalEnabled] = await Promise.all([
     listPublishedPosts({ take: 3 }),
     settings.externalNewsEnabled
-      ? fetchExternalNews(settings.externalNewsUrl, 5)
+      ? fetchExternalNews(settings.externalNewsUrl, 15)
       : Promise.resolve([]),
     prisma.service.findMany({
       orderBy: { sortOrder: "asc" },
