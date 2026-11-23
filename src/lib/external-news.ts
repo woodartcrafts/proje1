@@ -25,6 +25,7 @@ type ApiNewsItem = {
   effectiveDate?: string;
   publishedAt?: string;
   kind?: string;
+  category?: string;
   visualTheme?: string;
   disableSourceLink?: boolean;
   sources?: Array<{ name?: string; url?: string }>;
@@ -61,9 +62,11 @@ function formatDateLabel(date: Date | null) {
   });
 }
 
-function badgeFor(kind?: string) {
-  if (kind === "deadline") return "Son tarih";
-  if (kind === "alert") return "Uyarı";
+function badgeFor(item: ApiNewsItem) {
+  const category = item.category?.trim();
+  if (category) return category.slice(0, 24);
+  if (item.kind === "deadline") return "Son tarih";
+  if (item.kind === "alert") return "Uyarı";
   return "Güncel";
 }
 
@@ -125,9 +128,9 @@ export async function fetchExternalNews(
         dateLabel: formatDateLabel(date),
         source: item.primarySource || item.sources?.[0]?.name || "Resmi kaynak",
         href,
-        kind: item.kind || "news",
+        kind: item.kind || item.category || "news",
         theme: item.visualTheme || "crimson",
-        badge: badgeFor(item.kind),
+        badge: badgeFor(item),
       };
     });
   } catch {

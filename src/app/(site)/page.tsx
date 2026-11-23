@@ -121,7 +121,10 @@ export default async function HomePage() {
 
       {settings.externalNewsEnabled && externalNews.length > 0 ? (
         <section className="mg-wrap">
-          <MaliGelismelerSlider items={externalNews} />
+          <MaliGelismelerSlider
+            items={externalNews}
+            label={settings.externalNewsLabel}
+          />
         </section>
       ) : null}
 

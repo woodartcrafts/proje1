@@ -479,10 +479,10 @@ img {
   margin-left: auto;
 }
 
-/* ===== Güncel mali gelişmeler: ince şerit ===== */
+/* ===== Güncel mali gelişmeler: canlı kart ===== */
 .mg-wrap {
   width: 100%;
-  padding: 1.25rem 0 0;
+  padding: 1.5rem 0 0.25rem;
 }
 
 .mg-section {
@@ -490,27 +490,46 @@ img {
   margin-inline: auto;
 }
 
-.mg-bar {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+.mg-head {
+  display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.6rem 0.75rem 0.6rem 1.1rem;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  gap: 0.55rem;
+  margin-bottom: 0.85rem;
+}
+
+.mg-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #22a06b;
+  box-shadow: 0 0 0 4px rgba(34, 160, 107, 0.18);
+  flex-shrink: 0;
 }
 
 .mg-label {
   margin: 0;
-  padding-right: 1rem;
-  border-right: 1px solid var(--line);
   font-family: var(--font-body), sans-serif;
-  font-size: 0.86rem;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--brand);
-  white-space: nowrap;
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.mg-live {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: #e6f6ee;
+  color: #14603f;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.mg-stage {
+  position: relative;
 }
 
 .mg-viewport {
@@ -520,7 +539,7 @@ img {
 .mg-card-link {
   display: block;
   min-width: 0;
-  border-radius: 10px;
+  border-radius: 18px;
   color: inherit;
   text-decoration: none;
 }
@@ -534,95 +553,129 @@ a.mg-card-link:hover .mg-title {
 .mg-nav:focus-visible,
 .mg-dots button:focus-visible {
   outline: 2px solid var(--brand);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
 .mg-card {
+  position: relative;
+  overflow: hidden;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.85rem;
-  min-width: 0;
+  gap: 0.65rem;
+  min-height: 168px;
+  padding: 1.15rem 1.35rem 1.1rem;
+  border-radius: 18px;
+  color: #fff;
+  background:
+    linear-gradient(115deg, #6b1c24 0%, #a8322f 48%, #d45a3a 100%);
+}
+
+.mg-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.mg-card.theme-navy {
+  background: linear-gradient(115deg, #152a4a 0%, #1f4f86 55%, #3a7bbf 100%);
+}
+
+.mg-card.theme-emerald {
+  background: linear-gradient(115deg, #0f3d32 0%, #1a6b52 55%, #2fa87a 100%);
+}
+
+.mg-card.theme-amber {
+  background: linear-gradient(115deg, #5c3d12 0%, #9a6a1c 50%, #c9962e 100%);
+}
+
+.mg-card-top,
+.mg-title,
+.mg-summary,
+.mg-meta {
+  position: relative;
+  z-index: 1;
 }
 
 .mg-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.28rem 0.6rem;
-  border-radius: 999px;
-  font-size: 0.7rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 8px;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   white-space: nowrap;
-  background: #fbe3e6;
-  color: #8f1b2b;
-}
-
-.mg-card.theme-navy .mg-badge {
-  background: #e1ecf7;
-  color: #1c3a63;
-}
-
-.mg-card.theme-emerald .mg-badge {
-  background: #d9f2e6;
-  color: #14603f;
-}
-
-.mg-card.theme-amber .mg-badge {
-  background: #f8ebc9;
-  color: #6e4f10;
-}
-
-.mg-text {
-  display: grid;
-  gap: 0.1rem;
-  min-width: 0;
+  background: rgba(14, 20, 28, 0.35);
+  color: #fff;
 }
 
 .mg-title {
-  overflow: hidden;
-  font-size: 0.95rem;
-  font-weight: 700;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
   line-height: 1.35;
-  color: var(--ink);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: #fff;
 }
 
 .mg-summary {
+  margin: 0;
+  display: -webkit-box;
   overflow: hidden;
-  font-size: 0.82rem;
-  line-height: 1.35;
-  color: #4f6573;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .mg-meta {
-  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+  font-size: 0.82rem;
   line-height: 1.3;
-  color: #566b79;
-  text-align: right;
+  color: rgba(255, 255, 255, 0.82);
 }
 
-.mg-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.15rem;
+.mg-cal {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  opacity: 0.9;
 }
 
 .mg-nav {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
   display: inline-grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   padding: 0;
-  border: 1px solid var(--line);
+  border: 0;
   border-radius: 999px;
-  background: #fff;
-  color: var(--brand);
+  background: rgba(18, 28, 40, 0.78);
+  color: #fff;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transform: translateY(-50%);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.mg-nav-prev {
+  left: 0.55rem;
+}
+
+.mg-nav-next {
+  right: 0.55rem;
 }
 
 .mg-nav svg {
@@ -631,19 +684,21 @@ a.mg-card-link:hover .mg-title {
 }
 
 .mg-nav:hover {
-  background: #eef4f7;
-  border-color: #b5c7d2;
+  background: rgba(18, 28, 40, 0.95);
 }
 
 .mg-dots {
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  margin-top: 0.75rem;
 }
 
 .mg-dots button {
   position: relative;
   width: 28px;
-  height: 36px;
+  height: 28px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -655,8 +710,8 @@ a.mg-card-link:hover .mg-title {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 999px;
   background: #b4c4ce;
   transform: translate(-50%, -50%);
@@ -672,69 +727,38 @@ a.mg-card-link:hover .mg-title {
   background: var(--brand);
 }
 
-@media (max-width: 980px) {
-  .mg-bar {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.5rem 0.75rem;
-  }
-
-  .mg-label {
-    grid-column: 1 / -1;
-    padding: 0 0 0.45rem;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .mg-meta {
-    display: none;
-  }
-
-  .mg-card {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-}
-
 @media (max-width: 700px) {
   .mg-wrap {
-    padding-top: 1rem;
-  }
-
-  .mg-bar {
-    grid-template-columns: 1fr;
-    padding: 0.75rem 0.9rem 0.5rem;
+    padding-top: 1.1rem;
   }
 
   .mg-card {
-    grid-template-columns: 1fr;
-    gap: 0.45rem;
-    justify-items: start;
+    min-height: 0;
+    padding: 1rem 1.05rem 1rem;
+    border-radius: 14px;
   }
 
   .mg-title {
-    display: -webkit-box;
-    white-space: normal;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+    font-size: 1.02rem;
   }
 
   .mg-summary {
-    display: none;
-  }
-
-  .mg-controls {
-    justify-content: space-between;
-    margin-top: 0.1rem;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    font-size: 0.84rem;
   }
 
   .mg-nav {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
 
-  .mg-dots button {
-    width: 32px;
-    height: 40px;
+  .mg-nav-prev {
+    left: 0.35rem;
+  }
+
+  .mg-nav-next {
+    right: 0.35rem;
   }
 
   .calculator-grid {

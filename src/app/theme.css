@@ -498,16 +498,17 @@
 }
 
 /* ---------- Haber şeridi, hesaplama araçları ---------- */
-.mg-bar {
-  border-radius: 8px;
-  box-shadow: 0 1px 0 rgba(14, 27, 48, 0.04);
-}
-
 .mg-label {
   font-family: var(--font-display), Georgia, serif;
-  font-size: 1rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 1.05rem;
   font-weight: 600;
-  color: var(--ink);
+}
+
+.mg-card {
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(14, 27, 48, 0.12);
 }
 
 .mg-badge {
@@ -515,7 +516,7 @@
 }
 
 .mg-nav {
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .mg-meta {

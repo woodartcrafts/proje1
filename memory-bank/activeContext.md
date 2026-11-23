@@ -12,6 +12,6 @@ Ana sayfa dolduruldu: tüm yararlı linkler + ozcankutlu.com blog haberleri.
 - Blog / hizmet formlarında kaydetmeden önce “SEO kontrolü yap” (metin tabanlı, Blob yok)
 - SEO puanı anlam AI’sı değil; uzunluk + anlamsız tuşlama + yazım şüphesi (hece/tuş; sözlük değil)
 - Blog SEO: başlık/özet/içerik/SEO alanlarında gibberish + yazım uyarısı
-- Haber şeridi: Admin > Ayarlar’da “Ana sayfada haber şeridini göster” (Setting.externalNewsEnabled)
+- Haber şeridi: ozcankutlu.com API; CANLI kart UI; Admin’den aç/kapa + etiket + URL
 - Blog görüntülenme: Post.viewCount; istemci beacon `/api/blog/view`; Admin blog listesinde görünür (GA değil)
 - GA4: Admin > Ayarlar’da Measurement ID (G-XXXX); doluysa site layout gtag yükler; rapor analytics.google.com
