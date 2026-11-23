@@ -20,6 +20,7 @@ import { prisma } from "@/lib/db";
 import { fetchExternalNews } from "@/lib/external-news";
 import { isPortalEnabled } from "@/lib/portal-db";
 import { formatPostDate, listPublishedPosts, publishDate } from "@/lib/posts";
+import { getHeroDocs } from "@/lib/hero-docs";
 import { absoluteUrl } from "@/lib/seo";
 import { getSiteSettings } from "@/lib/settings";
 
@@ -75,17 +76,19 @@ const portalFeatures = [
 
 export default async function HomePage() {
   const settings = await getSiteSettings();
-  const [posts, externalNews, homeServices, portalEnabled] = await Promise.all([
-    listPublishedPosts({ take: 3 }),
-    settings.externalNewsEnabled
-      ? fetchExternalNews(settings.externalNewsUrl, 15)
-      : Promise.resolve([]),
-    prisma.service.findMany({
-      orderBy: { sortOrder: "asc" },
-      take: 4,
-    }),
-    isPortalEnabled(),
-  ]);
+  const [posts, externalNews, homeServices, portalEnabled, heroDocs] =
+    await Promise.all([
+      listPublishedPosts({ take: 3 }),
+      settings.externalNewsEnabled
+        ? fetchExternalNews(settings.externalNewsUrl, 15)
+        : Promise.resolve([]),
+      prisma.service.findMany({
+        orderBy: { sortOrder: "asc" },
+        take: 4,
+      }),
+      isPortalEnabled(),
+      getHeroDocs(),
+    ]);
 
   return (
     <>
@@ -115,7 +118,7 @@ export default async function HomePage() {
               </div>
             ) : null}
           </div>
-          <HeroDocs />
+          <HeroDocs sheets={heroDocs} />
         </div>
       </section>
 

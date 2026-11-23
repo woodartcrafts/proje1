@@ -49,6 +49,7 @@ model Setting {
   kvkkInfo         String @default("")
   aboutPhoto       String @default("") // Hakkımda fotoğrafı: JSON {show, ext, v}
   siteLogo         String @default("") // Üst menü logosu: JSON {ext, version}
+  heroDocs         String @default("") // Ana sayfa hero evrak yığını: JSON {sheets:[...]}
   portalEnabled    Int    @default(0) // Mükellef Köşesi açık mı (0/1)
 
   // Site başlığının (üst menü ve alt bilgi) görünümü. Boş yazı tipi = tema varsayılanı.

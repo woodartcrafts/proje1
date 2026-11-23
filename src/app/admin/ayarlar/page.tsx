@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
+import { HeroDocsForm } from "@/components/admin/HeroDocsForm";
 import { SettingsForm } from "@/components/admin/SettingsForm";
 import { SiteLogoForm } from "@/components/admin/SiteLogoForm";
 import { getSession } from "@/lib/auth";
+import { getHeroDocs } from "@/lib/hero-docs";
 import { getSiteSettings } from "@/lib/settings";
 import {
   DEFAULT_LOGO_SRC,
@@ -13,9 +15,10 @@ export default async function AdminSettingsPage() {
   const session = await getSession();
   if (!session) redirect("/admin/giris");
 
-  const [settings, logo] = await Promise.all([
+  const [settings, logo, heroDocs] = await Promise.all([
     getSiteSettings(),
     getSiteLogo(),
+    getHeroDocs(),
   ]);
 
   return (
@@ -38,6 +41,13 @@ export default async function AdminSettingsPage() {
           defaultSrc={DEFAULT_LOGO_SRC}
           maxMb={PHOTO_MAX_BYTES / 1024 / 1024}
         />
+      </div>
+
+      <div className="admin-panel" style={{ maxWidth: 760, marginBottom: "1.25rem" }}>
+        <h3 className="admin-subtitle" style={{ marginTop: 0 }}>
+          Ana sayfa evrak görseli
+        </h3>
+        <HeroDocsForm sheets={heroDocs} />
       </div>
 
       <div className="admin-panel" style={{ maxWidth: 760 }}>
