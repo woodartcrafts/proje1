@@ -10,7 +10,6 @@ import {
   IconMapPin,
   IconPhone,
 } from "@/components/Icons";
-import { Seal } from "@/components/Seal";
 import type { SiteSettings } from "@/lib/settings";
 import { SocialLinks } from "./SocialLinks";
 
@@ -37,10 +36,6 @@ export function SiteFooter({
 
   return (
     <footer className="site-footer sc-footer">
-      <div className="sc-footer-bg" aria-hidden="true">
-        <Seal className="sc-footer-seal" />
-      </div>
-
       <div className="container">
         <div className="sc-footer-cta" data-reveal>
           <div>

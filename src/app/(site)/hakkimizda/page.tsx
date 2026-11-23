@@ -4,7 +4,6 @@ import type { CSSProperties } from "react";
 import { IconCompass, IconLayers, IconShieldCheck, IconUsers } from "@/components/Icons";
 import { PageHero } from "@/components/PageHero";
 import { ProfessionalInfoSection } from "@/components/ProfessionalInfo";
-import { Seal } from "@/components/Seal";
 import { aboutPhotoSource, getAboutPhoto } from "@/lib/about-photo";
 import { getProfessionalInfo } from "@/lib/professional-info";
 import { pageMetadata } from "@/lib/seo";
@@ -90,9 +89,6 @@ export default async function AboutPage() {
                     className="about-photo-img"
                   />
                 </div>
-                <span className="about-photo-seal" aria-hidden="true">
-                  <Seal className="about-photo-seal-art" />
-                </span>
               </div>
               <figcaption>{settings.siteTitle}</figcaption>
             </figure>
