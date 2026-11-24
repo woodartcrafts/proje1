@@ -41,7 +41,12 @@ const result = spawnSync(
 if ((result.status ?? 1) !== 0) process.exit(result.status ?? 1);
 
 // Tek seferlik: OPS_RESET_ADMIN=1 iken ilk yönetici şifresini yeniler (sonra kaldır).
-if (process.env.OPS_RESET_ADMIN === "1") {
+const opsResetRaw = process.env.OPS_RESET_ADMIN ?? "";
+const opsReset = opsResetRaw.trim();
+console.log(
+  `[db-sync] OPS_RESET_ADMIN=${JSON.stringify(opsResetRaw)} (trim=${JSON.stringify(opsReset)})`,
+);
+if (opsReset === "1" || opsReset.toLowerCase() === "true" || opsReset === "yes") {
   console.log("[db-sync] OPS_RESET_ADMIN aktif — yönetici şifresi yenileniyor...");
   const resetScript = fileURLToPath(new URL("./ops-reset-admin.mjs", import.meta.url));
   const reset = spawnSync(
