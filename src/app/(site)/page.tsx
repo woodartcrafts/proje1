@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import { HeroDocs } from "@/components/HeroDocs";
 import { PostCard, ServiceCard, ToolCard } from "@/components/Cards";
@@ -73,6 +74,11 @@ export default async function HomePage() {
       isPortalEnabled(),
       getHeroDocs(),
     ]);
+
+  // Haber açıkken boş gelirse (timeout/geçici hata) sayfayı 30 dk boş cache'leme.
+  if (settings.externalNewsEnabled && externalNews.length === 0) {
+    noStore();
+  }
 
   return (
     <>

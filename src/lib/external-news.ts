@@ -12,8 +12,9 @@ export type ExternalNewsItem = {
 
 const DEFAULT_NEWS_URL = "https://www.ozcankutlu.com/api/news";
 
-// Haber kaynağı yavaşlarsa/takılırsa ana sayfa üretimi beklemesin; süre dolunca boş liste döner.
-const NEWS_TIMEOUT_MS = 3000;
+// ozcankutlu.com da Vercel'de; cold start + ağ gecikmesi 3 sn'yi aşabiliyor.
+// Kısa timeout boş liste döndürüp ISR önbelleğini zehirliyordu (canlıda slayt kayboluyordu).
+const NEWS_TIMEOUT_MS = 12000;
 
 type ApiNewsItem = {
   id?: string;
@@ -78,6 +79,64 @@ const DAY_MS = 24 * 60 * 60 * 1000;
  * Yayın tarihi (publishedAt) esas alınır; yoksa effectiveDate kullanılır.
  * Tarihi okunamayan haber, güncelliği doğrulanamadığı için dışarıda kalır.
  */
+function mapNewsItems(
+  rows: ApiNewsItem[],
+  limit: number,
+  maxAgeDays: number,
+): ExternalNewsItem[] {
+  const cutoff = Date.now() - maxAgeDays * DAY_MS;
+
+  const fresh = rows
+    .map((item, index) => ({
+      item,
+      index,
+      date: parseNewsDate(item.publishedAt) ?? parseNewsDate(item.effectiveDate),
+    }))
+    .filter(
+      (entry): entry is typeof entry & { date: Date } =>
+        entry.date !== null && entry.date.getTime() >= cutoff,
+    )
+    .sort((a, b) => b.date.getTime() - a.date.getTime())
+    .slice(0, limit);
+
+  return fresh.map(({ item, index, date }) => {
+    const href = item.disableSourceLink
+      ? ""
+      : item.primaryUrl || item.sources?.[0]?.url || "";
+
+    return {
+      id: item.id || `news-${index}`,
+      title: item.title?.trim() || "Güncel mali gelişme",
+      summary: (item.summary || item.analysis || "").trim(),
+      dateLabel: formatDateLabel(date),
+      source: item.primarySource || item.sources?.[0]?.name || "Resmi kaynak",
+      href,
+      kind: item.kind || item.category || "news",
+      theme: item.visualTheme || "crimson",
+      badge: badgeFor(item),
+    };
+  });
+}
+
+async function requestNews(url: string, init: RequestInit): Promise<ApiNewsItem[]> {
+  const response = await fetch(url, {
+    ...init,
+    signal: AbortSignal.timeout(NEWS_TIMEOUT_MS),
+    headers: {
+      Accept: "application/json",
+      "User-Agent": "Proje1NewsBot/1.0",
+      ...(init.headers ?? {}),
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`news_http_${response.status}`);
+  }
+
+  const payload = (await response.json()) as ApiNewsResponse;
+  return Array.isArray(payload.data) ? payload.data : [];
+}
+
 export async function fetchExternalNews(
   sourceUrl = DEFAULT_NEWS_URL,
   limit = 15,
@@ -86,55 +145,16 @@ export async function fetchExternalNews(
   const url = sourceUrl.trim() || DEFAULT_NEWS_URL;
 
   try {
-    const response = await fetch(url, {
-      next: { revalidate: 1800 },
-      signal: AbortSignal.timeout(NEWS_TIMEOUT_MS),
-      headers: {
-        Accept: "application/json",
-        "User-Agent": "Proje1NewsBot/1.0",
-      },
-    });
-
-    if (!response.ok) return [];
-
-    const payload = (await response.json()) as ApiNewsResponse;
-    const rows = Array.isArray(payload.data) ? payload.data : [];
-
-    const cutoff = Date.now() - maxAgeDays * DAY_MS;
-
-    const fresh = rows
-      .map((item, index) => ({
-        item,
-        index,
-        date: parseNewsDate(item.publishedAt) ?? parseNewsDate(item.effectiveDate),
-      }))
-      .filter(
-        (entry): entry is typeof entry & { date: Date } =>
-          entry.date !== null && entry.date.getTime() >= cutoff,
-      )
-      .sort((a, b) => b.date.getTime() - a.date.getTime())
-      .slice(0, limit);
-
-    return fresh.map(({ item, index, date }) => {
-      const href =
-        item.disableSourceLink
-          ? ""
-          : item.primaryUrl || item.sources?.[0]?.url || "";
-
-      return {
-        id: item.id || `news-${index}`,
-        title: item.title?.trim() || "Güncel mali gelişme",
-        summary: (item.summary || item.analysis || "").trim(),
-        dateLabel: formatDateLabel(date),
-        source: item.primarySource || item.sources?.[0]?.name || "Resmi kaynak",
-        href,
-        kind: item.kind || item.category || "news",
-        theme: item.visualTheme || "crimson",
-        badge: badgeFor(item),
-      };
-    });
+    const rows = await requestNews(url, { next: { revalidate: 1800 } });
+    return mapNewsItems(rows, limit, maxAgeDays);
   } catch {
-    return [];
+    // İlk deneme (ISR) başarısızsa bir kez önbelleksiz dene; boş sonucu 30 dk kilitleme.
+    try {
+      const rows = await requestNews(url, { cache: "no-store" });
+      return mapNewsItems(rows, limit, maxAgeDays);
+    } catch {
+      return [];
+    }
   }
 }
 
