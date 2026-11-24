@@ -5,6 +5,7 @@
 // - Veri kaybettirecek bir şema değişikliği varsa `db push` hata verir ve derleme durur (güvenli taraf).
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 
 if (!process.env.VERCEL) process.exit(0);
 
@@ -37,4 +38,18 @@ const result = spawnSync(
   [prismaCli, "db", "push", "--skip-generate"],
   { stdio: "inherit", env: { ...process.env, DATABASE_URL: url } },
 );
-process.exit(result.status ?? 1);
+if ((result.status ?? 1) !== 0) process.exit(result.status ?? 1);
+
+// Tek seferlik: OPS_RESET_ADMIN=1 iken ilk yönetici şifresini yeniler (sonra kaldır).
+if (process.env.OPS_RESET_ADMIN === "1") {
+  console.log("[db-sync] OPS_RESET_ADMIN aktif — yönetici şifresi yenileniyor...");
+  const resetScript = fileURLToPath(new URL("./ops-reset-admin.mjs", import.meta.url));
+  const reset = spawnSync(
+    process.execPath,
+    [resetScript],
+    { stdio: "inherit", env: { ...process.env, DATABASE_URL: url } },
+  );
+  if ((reset.status ?? 1) !== 0) process.exit(reset.status ?? 1);
+}
+
+process.exit(0);
