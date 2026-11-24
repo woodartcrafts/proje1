@@ -20,6 +20,9 @@ const footerLinks = [
   { href: "/yararli-linkler", label: "Yararlı Linkler" },
   { href: "/iletisim", label: "İletişim" },
   { href: "/kvkk", label: "KVKK Aydınlatma Metni" },
+  { href: "/gizlilik", label: "Gizlilik Politikası" },
+  { href: "/cerez", label: "Çerez Politikası" },
+  { href: "/kullanim-kosullari", label: "Kullanım Koşulları" },
 ];
 
 export function SiteFooter({

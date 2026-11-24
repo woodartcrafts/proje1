@@ -13,6 +13,9 @@ const staticPages = [
   { path: "/iletisim", changeFrequency: "yearly", priority: 0.6 },
   { path: "/yararli-linkler", changeFrequency: "monthly", priority: 0.4 },
   { path: "/kvkk", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/gizlilik", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/cerez", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/kullanim-kosullari", changeFrequency: "yearly", priority: 0.3 },
 ] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

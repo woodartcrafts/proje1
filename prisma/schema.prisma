@@ -50,6 +50,7 @@ model Setting {
   servicesProcess  String @default("")
   professionalInfo String @default("")
   kvkkInfo         String @default("")
+  legalPages       String @default("") // Gizlilik / çerez / kullanım: JSON {gizlilik,cerez,kullanim}
   aboutPhoto       String @default("") // Hakkımda fotoğrafı: JSON {show, ext, v}
   siteLogo         String @default("") // Üst menü logosu: JSON {ext, version}
   heroDocs         String @default("") // Ana sayfa hero evrak yığını: JSON {sheets:[...]}

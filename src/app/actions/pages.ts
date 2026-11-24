@@ -18,6 +18,14 @@ import {
 } from "@/lib/kvkk-fields";
 import { getKvkkInfo, saveKvkkInfo } from "@/lib/kvkk-info";
 import { buildKvkkTemplate, kvkkTemplateInput } from "@/lib/kvkk-text";
+import {
+  buildLegalDefaults,
+  getLegalPages,
+  LEGAL_PAGE_DEFS,
+  LEGAL_TEXT_MAX,
+  saveLegalPages,
+  type LegalPageKey,
+} from "@/lib/legal-pages";
 import { saveProfessionalInfo } from "@/lib/professional-info";
 import {
   isValidContactMapEmbedInput,
@@ -329,6 +337,98 @@ export async function resetKvkkTextAction(_prev: PageState): Promise<PageState> 
   revalidatePath("/kvkk");
   revalidatePath("/admin/kvkk");
   return { success: "Hazır metne dönüldü." };
+}
+
+function isLegalPageKey(value: string): value is LegalPageKey {
+  return LEGAL_PAGE_DEFS.some((item) => item.key === value);
+}
+
+function revalidateLegalPaths(key: LegalPageKey) {
+  const def = LEGAL_PAGE_DEFS.find((item) => item.key === key)!;
+  revalidatePath(def.path);
+  revalidatePath("/admin/yasal");
+  revalidatePath("/sitemap.xml");
+}
+
+export async function updateLegalPageAction(
+  _prev: PageState,
+  formData: FormData,
+): Promise<PageState> {
+  try {
+    await requireSession();
+  } catch {
+    return { error: "Oturum gerekli" };
+  }
+
+  const pageKeyRaw = String(formData.get("pageKey") ?? "");
+  if (!isLegalPageKey(pageKeyRaw)) {
+    return { error: "Geçersiz sayfa" };
+  }
+  const pageKey = pageKeyRaw;
+
+  const text = normalizeLegalText(String(formData.get("customText") ?? ""));
+  if (text.length > LEGAL_TEXT_MAX) {
+    return {
+      error: `Metin en fazla ${LEGAL_TEXT_MAX} karakter olabilir`,
+    };
+  }
+
+  const [settings, stored] = await Promise.all([
+    getSiteSettings(),
+    getLegalPages(),
+  ]);
+  const template = normalizeLegalText(
+    buildLegalDefaults({
+      siteTitle: settings.siteTitle,
+      email: settings.contactEmail,
+      phone: settings.contactPhone,
+      address: settings.contactAddress,
+    })[pageKey],
+  );
+
+  let customText = text;
+  if (text === "" || text === template) {
+    customText = "";
+  } else if (text.length < 100) {
+    return {
+      error:
+        "Metin çok kısa görünüyor. Hazır metne dönmek için “Şablona Dön” düğmesini kullanın.",
+    };
+  }
+
+  await saveLegalPages({ ...stored, [pageKey]: customText });
+  revalidateLegalPaths(pageKey);
+
+  const title = LEGAL_PAGE_DEFS.find((item) => item.key === pageKey)!.title;
+  return {
+    success: customText
+      ? `${title} özel metni kaydedildi.`
+      : `${title} şablonla aynı olduğu için şablon kullanılmaya devam ediyor.`,
+  };
+}
+
+export async function resetLegalPageAction(
+  _prev: PageState,
+  formData: FormData,
+): Promise<PageState> {
+  try {
+    await requireSession();
+  } catch {
+    return { error: "Oturum gerekli" };
+  }
+
+  const pageKeyRaw = String(formData.get("pageKey") ?? "");
+  if (!isLegalPageKey(pageKeyRaw)) {
+    return { error: "Geçersiz sayfa" };
+  }
+  const pageKey = pageKeyRaw;
+
+  const stored = await getLegalPages();
+  await saveLegalPages({ ...stored, [pageKey]: "" });
+  revalidateLegalPaths(pageKey);
+
+  const title = LEGAL_PAGE_DEFS.find((item) => item.key === pageKey)!.title;
+  return { success: `${title} hazır metne döndü.` };
 }
 
 function revalidateAboutPages() {
